@@ -6,7 +6,8 @@
 
 	import { links } from "$data/links";
 	import { externalLink, Metadata, TreeView } from "$lib";
-	import { Button, ListItem, TextBox } from "fluent-svelte";
+	import { Button, IconButton, ListItem, TextBox } from "fluent-svelte";
+	import Navigation from "@fluentui/svg-icons/icons/navigation_24_regular.svg?raw";
 
 	export let data: LayoutData;
 	$: ({
@@ -20,6 +21,7 @@
 	let searchQuery = "";
 	let searchFocused = false;
 	let autoSuggestVisible = false;
+	let mobileSidebarVisible = false;
 	let selection = 0;
 
 	// Name of the current page used in <title>
@@ -138,6 +140,11 @@
 	</aside>
 	<article class="page scroller">
 		<div class="search-mobile">
+			<IconButton
+				on:click={() => (mobileSidebarVisible = !mobileSidebarVisible)}
+			>
+				{@html Navigation}
+			</IconButton>
 			<div
 				class="autosuggest-wrapper"
 				use:clickOutside={() => (autoSuggestVisible = false)}
@@ -180,6 +187,9 @@
 				{/if}
 			</div>
 		</div>
+			<aside class="sidebar-tree" class:visible={mobileSidebarVisible}>
+				<TreeView tree={docs} />
+			</aside>
 		{#key pagePath}
 			<div
 				class="page-inner markdown-body"

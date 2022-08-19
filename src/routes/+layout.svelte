@@ -26,7 +26,6 @@
 		{
 			name: "Docs",
 			path: "/docs",
-			// sidebarTree: docs,
 			icon: Book
 		},
 		// {

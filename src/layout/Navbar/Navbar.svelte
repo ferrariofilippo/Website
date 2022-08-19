@@ -124,7 +124,7 @@
 		{#each items as { name, path, external, sidebarTree, icon, type }}
 			{#if type === "divider"}
 				<hr />
-			{:else if !sidebarTree}
+			{:else}
 				<ListItem
 					type="navigation"
 					sveltekit:prefetch
@@ -146,17 +146,6 @@
 					</svelte:fragment>
 					<span>{name}</span>
 				</ListItem>
-			{:else}
-				<TreeView
-					on:click={toggleSidebar}
-					tree={[
-						{
-							name,
-							icon,
-							pages: [...sidebarTree]
-						}
-					]}
-				/>
 			{/if}
 		{/each}
 		<hr />
