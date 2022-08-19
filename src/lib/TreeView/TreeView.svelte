@@ -11,7 +11,6 @@
 	import type { DocsCategory } from "$data/docs";
 
 	export let tree: DocsCategory[] = [];
-	$: console.log("docs tree", tree);
 	$: topLevelPages = tree.find(c => c.path === "")?.pages ?? [];
 
 	export let initial = true;
