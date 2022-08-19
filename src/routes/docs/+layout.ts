@@ -1,28 +1,17 @@
-import { docs, type DocsCategory, type DocsPage } from "$data/docs";
 import type { LayoutLoad } from "./$types";
+import { getPages } from "./+layout.server";
 
-function* flatten<T>(array: T[], depth = Infinity): Generator<T> {
-	for (const item of array) {
-		if (Array.isArray(item) && depth > 0) {
-			yield* flatten(item, depth - 1);
-		} else {
-			yield item;
-		}
-	}
-}
-
-export const findPages = (docsStructure: (DocsPage | DocsCategory)[]) => {
-	return [...flatten(docsStructure)].filter(
-		(page): page is DocsPage => Object.prototype.hasOwnProperty.call(page, "path")
-	);
-};
-
-export const load: LayoutLoad = ({ url }) => {
-	const docsPages = findPages(docs);
+export const load: LayoutLoad = async ({ url, routeId, data }) => {
+	const slug = routeId
+		?.replace("docs", "")
+		?.substring(routeId?.lastIndexOf("/") + 1);
+	const docsPages = getPages();
+	const { tree } = data;	
 
 	return {
 		pagePath: url.pathname,
-		currentPage: docsPages.find(p => `/docs${ p.path }` === url.pathname),
-		docsPages
+		currentPage: docsPages.find(p => p.slug === slug),
+		docsPages,
+		docs: tree
 	};
 };

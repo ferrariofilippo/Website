@@ -1,3 +1,7 @@
+---
+name: Code quality standards
+---
+
 # Code quality standards
 
 All code contributed to the repository must follow

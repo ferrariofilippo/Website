@@ -6,14 +6,17 @@
 	import { page } from "$app/stores";
 	import ChevronDown from "@fluentui/svg-icons/icons/chevron_down_16_regular.svg?raw";
 
-	import { ListItem } from "fluent-svelte";
+	import { IconButton, ListItem } from "fluent-svelte";
 	import { getCSSDuration } from "fluent-svelte/internal";
-	import type { DocsCategory, DocsPage } from "$data/docs";
+	import type { DocsCategory } from "$data/docs";
 
-	export let tree: (DocsPage | DocsCategory)[] = [];
+	export let tree: DocsCategory[] = [];
+	$: console.log("docs tree", tree);
+	$: topLevelPages = tree.find(c => c.path === "")?.pages ?? [];
+
 	export let initial = true;
 
-	let treeViewState: any;
+	let treeViewState: { [K in DocsCategory["path"]]: boolean };
 
 	onMount(() => {
 		// Check localStorage for an existing treeViewState
@@ -21,15 +24,12 @@
 		treeViewState = JSON.parse(localStorage.getItem("treeViewState") ?? "{}");
 	});
 
-	// Utility function for converting regular names to kebab case
-	const id = (s: string) => s.toLowerCase().split(" ").join("-");
-
 	// Function for expanding/collapsing docs categories
-	const toggleExpansion = (event: MouseEvent, name: string) => {
+	const toggleExpansion = (event: MouseEvent, path: string) => {
 		event.stopPropagation();
 
 		// Modify treeViewState to have the opposite of the previous entry for the category
-		treeViewState[id(name)] = !treeViewState[id(name)];
+		treeViewState[path] = !treeViewState[path];
 
 		// Update value in localStorage for persistence
 		localStorage.setItem("treeViewState", JSON.stringify(treeViewState));
@@ -37,38 +37,54 @@
 </script>
 
 <div class="tree-view scroller" class:initial>
-	{#each tree as { name, path, pages, icon }}
-		{#if pages}
-			<div class="subtree" class:expanded={treeViewState?.[id(name)]}>
-				<ListItem
-					on:click={e => toggleExpansion(e, name)}
-				>
-					<svelte:fragment slot="icon">
-						{@html icon || ""}
-					</svelte:fragment>
-					<span class="tree-view-item">{name}</span>
-					<div class="expander-icon" class:expanded={treeViewState?.[id(name)]}>{@html ChevronDown}</div>
-				</ListItem>
-				{#if treeViewState?.[id(name)]}
-					<div class="subtree-items"
-					     transition:slide|local={{ duration: getCSSDuration("--fds-control-fast-duration"), easing: circOut }}
-					     class:expanded={treeViewState?.[id(name)]}>
-						<svelte:self tree={pages} initial={false} />
-					</div>
-				{/if}
-			</div>
-		{:else}
-			<ListItem
-				on:click
-				selected={`/docs${path}` === $page.url.pathname}
-				href="/docs{path}"
-			>
+	<!-- include top level pages -->
+	{#each topLevelPages as { path, slug, icon, name } (slug)}
+		<ListItem
+			on:click
+			selected={$page.routeId === `docs/${path}/${slug}`}
+			href="/docs{path}/{slug}"
+		>
+			<svelte:fragment slot="icon">
+				{@html icon || ""}
+			</svelte:fragment>
+			{name}
+		</ListItem>
+	{/each}
+	{#each tree.filter(c => c.name.length > 0) as { name, path, pages, icon }}
+		<div class="subtree" class:expanded={treeViewState?.[path]}>
+			<ListItem on:click={e => toggleExpansion(e, path)}>
 				<svelte:fragment slot="icon">
 					{@html icon || ""}
 				</svelte:fragment>
-				{name}
+				<span class="tree-view-item">{name}</span>
+				<div class="expander-icon" class:expanded={treeViewState?.[path]}>
+					{@html ChevronDown}
+				</div>
 			</ListItem>
-		{/if}
+			{#if treeViewState?.[path]}
+				<div
+					class="subtree-items"
+					transition:slide|local={{
+						duration: getCSSDuration("--fds-control-fast-duration"),
+						easing: circOut
+					}}
+					class:expanded={treeViewState?.[path]}
+				>
+					{#each pages as { path, slug, icon, name } (slug)}
+						<ListItem
+							on:click
+							selected={$page.routeId === `docs/${path}/${slug}`}
+							href="/docs{path}/{slug}"
+						>
+							<svelte:fragment slot="icon">
+								{@html icon || ""}
+							</svelte:fragment>
+							{name}
+						</ListItem>
+					{/each}
+				</div>
+			{/if}
+		</div>
 	{/each}
 </div>
 
@@ -84,12 +100,17 @@
 
 					.expander-icon {
 						@include flex($align: center);
-						transition: transform var(--fds-control-fast-duration) var(--fds-control-fast-out-slow-in-easing);
+						transition: transform var(--fds-control-fast-duration)
+							var(--fds-control-fast-out-slow-in-easing);
 						transform-origin: center;
 
-						&.expanded { transform: rotate(180deg) }
+						&.expanded {
+							transform: rotate(180deg);
+						}
 
-						svg { @include icon }
+						svg {
+							@include icon;
+						}
 					}
 				}
 			}

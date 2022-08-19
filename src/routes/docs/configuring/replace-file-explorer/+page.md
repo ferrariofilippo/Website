@@ -1,3 +1,7 @@
+---
+name: Replacing File Explorer with Files
+---
+
 # Replacing File Explorer with Files (Experimental)
 
 *This setting modifies the system registry, make sure to create a backup beforehand and proceed at your own risk.*

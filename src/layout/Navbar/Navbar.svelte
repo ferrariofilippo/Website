@@ -7,7 +7,7 @@
 	import Navigation from "@fluentui/svg-icons/icons/navigation_24_regular.svg?raw";
 
 	export let items: NavbarItem[] = [];
-	export let buttons = [];
+	export let buttons: { icon: string; href: string; label: string }[] = [];
 
 	let innerWidth = 649; // Don't render the mobile layout before hydration
 	let sidebarVisible = false;
@@ -19,16 +19,18 @@
 	};
 
 	const handleOuterClick = (e: MouseEvent) => {
-		if (!(
-			!sidebarVisible ||
-			e.target === sidebarButton ||
-			sidebarButton.contains(e.target as Node) ||
-			e.target === sidebar ||
-			sidebar.contains(e.target as Node)
-		)) {
+		if (
+			!(
+				!sidebarVisible ||
+				e.target === sidebarButton ||
+				sidebarButton.contains(e.target as Node) ||
+				e.target === sidebar ||
+				sidebar.contains(e.target as Node)
+			)
+		) {
 			toggleSidebar();
 		}
-	}
+	};
 
 	$: {
 		$navigating && (sidebarVisible = false);
@@ -44,34 +46,34 @@
 				<source
 					media="(prefers-color-scheme: dark)"
 					srcset="/branding/logo-dark.svg"
-				>
+				/>
 				<source
 					media="(prefers-color-scheme: light)"
 					srcset="/branding/logo-light.svg"
-				>
+				/>
 				<img
 					alt="Files logo"
 					class="logo-image"
 					height="32"
 					src="/branding/logo-light.svg"
 					width="32"
-				>
+				/>
 			</picture>
 			Files
 		</a>
 		{#if innerWidth > 648}
-			<div class="divider"></div>
+			<div class="divider" />
 			{#each items as { name, path, external, icon, type }}
 				{#if type === "divider"}
-					<div class="divider"></div>
+					<div class="divider" />
 				{:else}
 					<a
 						class="item"
 						sveltekit:prefetch
 						class:selected={$page.url.pathname === path ||
-						($page.url.pathname.split("/").length > 1 &&
-							path.split("/").length > 1 &&
-							$page.url.pathname.startsWith(path) &&
+							($page.url.pathname.split("/").length > 1 &&
+								path.split("/").length > 1 &&
+								$page.url.pathname.startsWith(path) &&
 								!(path === "" || path === "/")) ||
 							(path === "/" && $page.url.pathname === "")}
 						href={path}
@@ -89,7 +91,10 @@
 	</nav>
 	<div class="buttons">
 		<Tooltip text="#supportukraine" placement="bottom" delay={200} offset={0}>
-			<span class="support-ukraine" aria-label="Ukraine flag in support of Ukraine and its people, #supportukraine"></span>
+			<span
+				class="support-ukraine"
+				aria-label="Ukraine flag in support of Ukraine and its people, #supportukraine"
+			/>
 		</Tooltip>
 		{#if innerWidth > 648}
 			{#each buttons as { icon, href, label }}
@@ -98,8 +103,8 @@
 					{href}
 					aria-label={label}
 					title={label}
-					{...externalLink}
-				>{@html icon}</a>
+					{...externalLink}>{@html icon}</a
+				>
 			{/each}
 		{:else}
 			<button
@@ -118,14 +123,14 @@
 	>
 		{#each items as { name, path, external, sidebarTree, icon, type }}
 			{#if type === "divider"}
-				<hr>
+				<hr />
 			{:else if !sidebarTree}
 				<ListItem
 					type="navigation"
 					sveltekit:prefetch
 					on:click={toggleSidebar}
 					selected={$page.url.pathname === path ||
-					($page.url.pathname.split("/").length > 1 &&
+						($page.url.pathname.split("/").length > 1 &&
 							path.split("/").length > 1 &&
 							$page.url.pathname.startsWith(path) &&
 							!(path === "" || path === "/")) ||
@@ -146,7 +151,6 @@
 					on:click={toggleSidebar}
 					tree={[
 						{
-							type: "category",
 							name,
 							icon,
 							pages: [...sidebarTree]
@@ -155,14 +159,9 @@
 				/>
 			{/if}
 		{/each}
-		<hr>
+		<hr />
 		{#each buttons as { icon, href, label }}
-			<ListItem
-				{href}
-				sveltekit:prefetch
-				type="navigation"
-				{...externalLink}
-			>
+			<ListItem {href} sveltekit:prefetch type="navigation" {...externalLink}>
 				<svelte:fragment slot="icon">
 					{#if icon}
 						{@html icon}

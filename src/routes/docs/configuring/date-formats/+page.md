@@ -1,3 +1,7 @@
+---
+name: Date Formats
+---
+
 # Date Formats
 
 Files comes with three different options to let you customize the date format.

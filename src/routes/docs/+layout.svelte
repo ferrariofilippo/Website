@@ -5,12 +5,16 @@
 	import { page } from "$app/stores";
 
 	import { links } from "$data/links";
-	import { docs } from "$data/docs";
 	import { externalLink, Metadata, TreeView } from "$lib";
 	import { Button, ListItem, TextBox } from "fluent-svelte";
 
 	export let data: LayoutData;
-	$: ({ pagePath, docsPages, currentPage = { name: "Overview", path: "" } } = data);
+	$: ({
+		docs,
+		pagePath,
+		docsPages,
+		currentPage = { name: "Overview", path: "" }
+	} = data);
 
 	let value = "";
 	let searchQuery = "";
@@ -42,11 +46,15 @@
 		if (key === "Enter") {
 			if (
 				searchResults.length > 0 &&
-				$page.url.pathname !== `/docs${ searchResults[selection].path }`
+				$page.routeId !==
+					`docs${searchResults[selection].path}/${searchResults[selection].slug}`
 			)
-				goto(`/docs${ searchResults[selection].path }`, {
-					keepfocus: true
-				});
+				goto(
+					`/docs${searchResults[selection].path}/${searchResults[selection].slug}`,
+					{
+						keepfocus: true
+					}
+				);
 		} else if (key === "ArrowDown") {
 			selection++;
 			if (selection > searchResults.length - 1) selection = 0;
@@ -74,8 +82,9 @@
 </script>
 
 <svelte:head>
-	<Metadata title="Files • {pageTitle ? `Docs - ${pageTitle}` : 'Docs'}"
-	          image="docs"
+	<Metadata
+		title="Files • {pageTitle ? `Docs - ${pageTitle}` : 'Docs'}"
+		image="docs"
 	/>
 </svelte:head>
 
@@ -96,11 +105,15 @@
 					on:search={() => {
 						if (
 							searchResults.length > 0 &&
-							$page.url.pathname !== `/docs${searchResults[selection].path}`
+							$page.routeId !==
+								`docs${searchResults[selection].path}/${searchResults[selection].slug}`
 						)
-							goto(`/docs${searchResults[selection].path}`, {
-								keepfocus: true
-							});
+							goto(
+								`/docs${searchResults[selection].path}/${searchResults[selection].slug}`,
+								{
+									keepfocus: true
+								}
+							);
 					}}
 					placeholder="Search Documentation"
 					type="search"
@@ -108,8 +121,8 @@
 				{#if autoSuggestVisible}
 					<div class="autosuggest-flyout scroller">
 						{#if searchResults.length > 0}
-							{#each searchResults as { name, path }, i}
-								<ListItem selected={selection === i} href="/docs{path}">
+							{#each searchResults as { name, path, slug }, i}
+								<ListItem selected={selection === i} href="/docs{path}/{slug}">
 									{name}
 								</ListItem>
 							{/each}
@@ -119,7 +132,7 @@
 					</div>
 				{/if}
 			</div>
-			<hr role="separator">
+			<hr role="separator" />
 		</div>
 		<TreeView tree={docs} />
 	</aside>
@@ -139,11 +152,15 @@
 					on:search={() => {
 						if (
 							searchResults.length > 0 &&
-							$page.url.pathname !== `/docs${searchResults[selection].path}`
+							$page.routeId !==
+								`docs${searchResults[selection].path}/${searchResults[selection].slug}`
 						)
-							goto(`/docs${searchResults[selection].path}`, {
-								keepfocus: true
-							});
+							goto(
+								`/docs${searchResults[selection].path}/${searchResults[selection].slug}`,
+								{
+									keepfocus: true
+								}
+							);
 					}}
 					placeholder="Search Documentation"
 					type="search"
@@ -151,8 +168,8 @@
 				{#if autoSuggestVisible}
 					<div class="autosuggest-flyout scroller">
 						{#if searchResults.length > 0}
-							{#each searchResults as { name, path }, i}
-								<ListItem selected={selection === i} href="/docs{path}">
+							{#each searchResults as { name, path, slug }, i}
+								<ListItem selected={selection === i} href="/docs{path}/{slug}">
 									{name}
 								</ListItem>
 							{/each}
@@ -164,19 +181,23 @@
 			</div>
 		</div>
 		{#key pagePath}
-			<div class="page-inner markdown-body" in:fly|local={{ y: 6, duration: 300, delay: 300 }}
-			     out:fly|local={{ y: 6, duration: 300 }}>
+			<div
+				class="page-inner markdown-body"
+				in:fly|local={{ y: 6, duration: 300, delay: 300 }}
+				out:fly|local={{ y: 6, duration: 300 }}
+			>
 				<header>
 					<span>
-						{$page.url.pathname.split("/").join(" / ").substring(2)}
-						{$page.url.pathname === "/docs" ? " / overview" : ""}
+						{$page.routeId?.replace("docs", "")?.split("/").join(" / ")}
+						{$page.routeId === "docs" ? " / overview" : ""}
 					</span>
 					<div class="header-right">
-						<Button variant="hyperlink"
-						        href="https://github.com/{links.github.owner}/{links.github
+						<Button
+							variant="hyperlink"
+							href="https://github.com/{links.github.owner}/{links.github
 								.siteRepo}/edit/main/src/routes/docs{currentPage.path ||
 								'/index'}.md"
-						        {...externalLink}
+							{...externalLink}
 						>
 							Edit this page
 						</Button>

@@ -1,3 +1,6 @@
+---
+name: Custom Themes
+---
 # Custom Themes
 
 Files has a selection of built-in themes but you can also create your own theme by adding a resource file to the themes directory in the `LocalState` folder.

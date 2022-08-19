@@ -1,3 +1,6 @@
+---
+name: Terminal Profiles
+---
 # Terminal Profiles
 
 Files supports multiple options for configuring terminal profiles. Aside from setting the default terminal that you can

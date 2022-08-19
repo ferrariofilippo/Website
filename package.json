@@ -17,6 +17,7 @@
 		"@neodrag/svelte": "^1.2.3",
 		"@sveltejs/adapter-vercel": "next",
 		"@sveltejs/kit": "next",
+		"@types/jsonpath": "^0.2.0",
 		"@typescript-eslint/eslint-plugin": "^5.33.1",
 		"@typescript-eslint/parser": "^5.33.1",
 		"autoprefixer": "^10.4.8",

@@ -5,7 +5,6 @@
 
 	import { Footer, Navbar } from "$layout";
 	import { links, type NavbarItem } from "$data/links";
-	import { docs } from "$data/docs";
 
 	import "fluent-svelte/theme.css";
 
@@ -27,7 +26,7 @@
 		{
 			name: "Docs",
 			path: "/docs",
-			sidebarTree: docs,
+			// sidebarTree: docs,
 			icon: Book
 		},
 		// {
@@ -73,7 +72,7 @@
 	<meta content="website" name="og:type">
 
 	<link
-		href="/branding/logo{$page.url.pathname.startsWith('/themes') ? '-themes' : ''}{'-' + (theme ?? 'light')}.svg"
+		href="/branding/logo{$page.routeId?.startsWith('/themes') ? '-themes' : ''}{'-' + (theme ?? 'light')}.svg"
 		rel="icon"
 		type="image/svg+xml"
 	>

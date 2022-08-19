@@ -1,3 +1,7 @@
+---
+name: Updates
+---
+
 # Updates
 
 ### How updates work

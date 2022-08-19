@@ -5,7 +5,7 @@
 	import { page } from "$app/stores";
 	import { dev } from "$app/env";
 
-	$: channel = $page.url.pathname.includes("preview") ? "preview" : "stable";
+	$: channel = $page.routeId?.endsWith("preview") ? "preview" : "stable";
 
 	let link: HTMLAnchorElement;
 

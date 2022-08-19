@@ -1,3 +1,7 @@
+---
+name: Keyboard Shortcuts
+---
+
 # Keyboard Shortcuts
 
 Files comes with built in keyboard shortcuts to make navigating the app easier.
