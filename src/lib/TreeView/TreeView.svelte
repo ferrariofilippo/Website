@@ -40,7 +40,7 @@
 	{#each topLevelPages as { path, slug, icon, name } (slug)}
 		<ListItem
 			on:click
-			selected={$page.routeId === `docs/${path}/${slug}`}
+			selected={$page.routeId === `docs${slug.length > 0 ? "/" + slug : slug}`}
 			href="/docs{path}/{slug}"
 		>
 			<svelte:fragment slot="icon">
