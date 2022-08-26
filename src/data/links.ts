@@ -1,5 +1,3 @@
-import type { DocsCategory, DocsPage } from "$data/docs";
-
 export const links = {
 	discord: "files",
 	twitter: "FilesForWindows",
