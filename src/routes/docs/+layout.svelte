@@ -213,6 +213,7 @@
 						</Button>
 					</div>
 				</header>
+				<h1>{currentPage.name}</h1>
 				<slot />
 			</div>
 		{/key}

@@ -2,11 +2,9 @@ import type { LayoutLoad } from "./$types";
 import { getPages } from "./+layout.server";
 
 export const load: LayoutLoad = async ({ url, routeId, data }) => {
-	const slug = routeId
-		?.replace("docs", "")
-		?.substring(routeId?.lastIndexOf("/") + 1);
+	const slug = routeId?.substring(routeId?.lastIndexOf("/") + 1);
 	const docsPages = getPages();
-	const { tree } = data;	
+	const { tree } = data;
 
 	return {
 		pagePath: url.pathname,

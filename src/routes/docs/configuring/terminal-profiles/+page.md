@@ -1,8 +1,6 @@
 ---
 name: Terminal Profiles
 ---
-# Terminal Profiles
-
 Files supports multiple options for configuring terminal profiles. Aside from setting the default terminal that you can
 launch from the "Open in terminal" option, you can also adjust the launch arguments. You can also launch any terminal
 profile by typing the name or path in the navigation bar.

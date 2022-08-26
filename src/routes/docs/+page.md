@@ -2,11 +2,11 @@
 name: Overview
 ---
 
-# What is Files?
+## What is Files?
 
 Files is a file manager for Windows with a powerful yet intuitive design. It has features like multiple tabs, panes, columns, shell extensions in the context menu and tags.
 
-# Download Files
+## Download Files
 
 - [Download Files](/download/stable)
 - [Download Preview](/download/preview)

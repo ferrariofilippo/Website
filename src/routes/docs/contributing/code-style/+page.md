@@ -2,8 +2,6 @@
 name: Code quality standards
 ---
 
-# Code quality standards
-
 All code contributed to the repository must follow
 our [Model-View-ViewModel](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) design path. The code
 must be well-written and expose a clear purpose. Workarounds are not welcome unless the scope of the PR touches external
